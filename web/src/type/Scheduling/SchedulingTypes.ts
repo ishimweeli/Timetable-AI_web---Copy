@@ -23,3 +23,9 @@ export interface LocalEntry {
   roomName: string;
   isManuallyScheduled: boolean;
 }
+
+export interface ConflictCheck {
+  hasConflict: boolean;
+  conflictType: 'teacher' | 'room' | 'class';
+  conflictDetails: string;
+}

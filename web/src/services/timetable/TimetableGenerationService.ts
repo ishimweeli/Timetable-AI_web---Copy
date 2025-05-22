@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { API_URL } from "../baseUrl";
+import { ConflictCheck } from "@/type/Scheduling/SchedulingTypes";
 
 const entriesCache = {};
 const CACHE_TIMEOUT = 5 * 60 * 1000;
@@ -49,6 +50,7 @@ export interface Timetable {
   isPublished: boolean;
   createdDate: string;
   modifiedDate: string;
+  version: number;
   entries?: TimetableEntry[];
 }
 
@@ -180,7 +182,10 @@ class TimetableGenerationService {
         throw new Error("Authentication required");
       }
 
-      const validEntries = entries.filter(entry => {
+      const processedEntries = entries.map(entry => ({
+        ...entry,
+        status: entry.status || "Draft",
+      })).filter(entry => {
         if (!entry.bindingId) {
           return false;
         }
@@ -194,15 +199,15 @@ class TimetableGenerationService {
         return true;
       });
       
-      if (validEntries.length !== entries.length) {
-        if (validEntries.length === 0) {
+      if (processedEntries.length !== entries.length) {
+        if (processedEntries.length === 0) {
           throw new Error("No valid entries to save");
         }
       }
       
       const response = await axios.post(
         `${API_URL}/manual-scheduling/entries/${timetableId}`,
-        validEntries,
+        processedEntries,
         {
           headers: {
             'Authorization': token,
@@ -237,7 +242,7 @@ class TimetableGenerationService {
       period: periodId,
       durationMinutes: 45,
       periodType: "Regular",
-      status: "Active",
+      status: "Draft",
       isManuallyScheduled: true
     };
   };
@@ -365,7 +370,7 @@ class TimetableGenerationService {
           subjectId: binding.subjectId,
           teacherId: binding.teacherId,
           classId: binding.classId,
-          status: entry.status || "Active",
+          status: entry.status || "Draft",
           durationMinutes: entry.durationMinutes || 45,
           periodType: entry.periodType || "Regular",
           subjectName: binding.subjectName,
@@ -430,14 +435,23 @@ class TimetableGenerationService {
     }
   };
 
-  getBindingsForClass = async (classUuid: string, orgId: number): Promise<Binding[]> => {
+  getBindingsForClass = async (classUuid: string, orgId: number, planSettingId: number | string | null): Promise<Binding[]> => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         throw new Error("Authentication required");
       }
+      // if (!planSettingId) {
+      //   // Consider if this should throw an error or if the backend handles its absence
+      //   console.warn("planSettingId is missing for getBindingsForClass. Backend might require it.");
+      // }
+
+      let url = `${API_URL}/bindings/classes/${classUuid}?orgId=${orgId}`;
+      if (planSettingId) {
+        url += `&planSettingId=${planSettingId}`;
+      }
       
-      const response = await axios.get(`${API_URL}/bindings/classes/${classUuid}?orgId=${orgId}`, {
+      const response = await axios.get(url, {
         headers: {
           'Authorization': token,
           'Content-Type': 'application/json',
@@ -451,6 +465,7 @@ class TimetableGenerationService {
       
       return response.data.data;
     } catch (error) {
+      console.error(`Error fetching bindings for class ${classUuid}:`, error);
       return [];
     }
   };
@@ -682,7 +697,7 @@ class TimetableGenerationService {
         teacherId: entry.teacherId,
         durationMinutes: entry.durationMinutes || 45,
         periodType: entry.periodType || "Regular",
-        status: entry.status || "Active",
+        status: entry.status || "Draft",
         isClassBandEntry: entry.isClassBandEntry || false,
         subjectName: entry.subjectName,
         teacherName: entry.teacherName,
@@ -778,7 +793,7 @@ class TimetableGenerationService {
               teacherId: binding.teacherId,
               durationMinutes: entry.durationMinutes || 45,
               periodType: entry.periodType || "Regular",
-              status: entry.status || "Active",
+              status: entry.status || "Draft",
               subjectName: binding.subjectName,
               teacherName: binding.teacherFullName || binding.teacherName || 
                 (binding.teacherFirstName && binding.teacherLastName ? 
@@ -827,7 +842,7 @@ class TimetableGenerationService {
             teacherId: binding.teacherId,
             durationMinutes: entry.durationMinutes || 45,
             periodType: entry.periodType || "Regular",
-            status: entry.status || "Active",
+            status: entry.status || "Draft",
             subjectName: binding.subjectName,
             teacherName: binding.teacherFullName || binding.teacherName || 
               (binding.teacherFirstName && binding.teacherLastName ? 
@@ -914,7 +929,7 @@ class TimetableGenerationService {
                 period: entry.periodId,
                 durationMinutes: entry.durationMinutes || 45,
                 periodType: entry.periodType || "Regular",
-                status: entry.status || "Active",
+                status: entry.status || "Draft",
                 subjectId: binding.subjectId,
                 subjectName: binding.subjectName,
                 teacherId: binding.teacherId,
@@ -940,7 +955,7 @@ class TimetableGenerationService {
               period: entry.periodId,
               durationMinutes: entry.durationMinutes || 45,
               periodType: entry.periodType || "Regular",
-              status: entry.status || "Active",
+              status: entry.status || "Draft",
               teacherName: entry.teacherName || binding.teacherFullName || binding.teacherName || 
                 (binding.teacherFirstName && binding.teacherLastName ? 
                   `${binding.teacherFirstName} ${binding.teacherLastName}` : 'No Teacher')
@@ -1003,7 +1018,7 @@ class TimetableGenerationService {
                     teacherId: binding.teacherId,
                     durationMinutes: entry.durationMinutes || 45,
                     periodType: entry.periodType || "Regular",
-                    status: entry.status || "Active",
+                    status: entry.status || "Draft",
                     subjectName: binding.subjectName,
                     teacherName,
                     roomName: binding.roomName
@@ -1096,6 +1111,74 @@ class TimetableGenerationService {
                 success: false,
                 message: error.message || 'Unknown error'
               };
+            }
+          };
+        
+          publishTimetable = async (timetableId: number | string, planSettingId: number | string): Promise<Timetable> => {
+            try {
+              const token = localStorage.getItem("authToken");
+              if (!token) {
+                throw new Error("Authentication required");
+              }
+              if (!timetableId) {
+                throw new Error("Timetable ID is required to publish.");
+              }
+              if (!planSettingId) {
+                throw new Error("Plan Setting ID is required to publish.");
+              }
+        
+              const response = await axios.put(
+                `${API_URL}/timetables/${timetableId}/publish`, 
+                null, 
+                {
+                  headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                  },
+                  params: { 
+                    planSettingId: planSettingId 
+                  }
+                }
+              );
+              
+              const cacheKey = String(timetableId);
+              delete entriesCache[cacheKey]; 
+        
+              return response.data as Timetable; 
+            } catch (error) {
+              console.error("Error publishing timetable:", error.response?.data || error.message);
+              throw error.response?.data || error;
+            }
+          };
+        
+          validateEntries = async (entries: TimetableEntry[], planSettingId: number | string): Promise<ConflictCheck[]> => {
+            try {
+              const token = localStorage.getItem("authToken");
+              if (!token) {
+                throw new Error("Authentication required");
+              }
+              if (!entries || entries.length === 0) {
+                return []; // No entries to validate
+              }
+              if (!planSettingId) {
+                throw new Error("Plan Setting ID is required for validation.");
+              }
+        
+              const response = await axios.post(
+                `${API_URL}/entries/validate`, 
+                { entries, planSettingId }, 
+                {
+                  headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                  }
+                }
+              );
+              
+              return response.data as ConflictCheck[]; 
+            } catch (error) {
+              console.error("Error validating entries:", error.response?.data || error.message);
+              throw error.response?.data || error; 
             }
           };
         }
