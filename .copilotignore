@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+target/
+.env*
+*.key
+*.pem
+secrets/
+
+# Context: Read autocoding/context.md for project overview

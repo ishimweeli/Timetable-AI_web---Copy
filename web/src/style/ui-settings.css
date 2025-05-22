@@ -1,0 +1,23 @@
+:root {
+  --font-family: 'Inter', sans-serif;
+  --font-size: 16px;
+  --cell-width: 120px;
+  --cell-height: 40px;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+}
+
+.istui-timetable__nav-sidebar {
+  background-color: hsl(var(--sidebar-background));
+  color: hsl(var(--sidebar-foreground));
+}
+.bg-primary {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+.text-primary {
+  color: hsl(var(--primary)) !important;
+}

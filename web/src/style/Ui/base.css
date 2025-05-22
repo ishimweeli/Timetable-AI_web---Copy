@@ -1,0 +1,517 @@
+
+.bg-primary {
+    background-color: var(--primary-color);
+}
+
+.bg-primary--hover {
+    background-color: var(--primary-hover);
+}
+
+.bg-secondary {
+    background-color: var(--secondary-color);
+}
+
+.bg-primary-light {
+    background-color: var(--primary-light-color);
+}
+
+.bg-primary-dark {
+    background-color: var(--primary-dark-color);
+}
+
+.bg-progress {
+    background-color: var(--progress-color);
+}
+
+.border-main {
+    border-color: var(--border-color);
+}
+
+.data-\[state\=active\]\:text-foreground[data-state="active"] {
+    color: hsl(var(--foreground));
+}
+
+.data-\[state\=active\]\:bg-background[data-state="active"] {
+    background-color: transparent !important;
+}
+
+.focus-visible\:ring-2:focus-visible {
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+
+
+.istui-timetable__nav-header {
+    
+}
+  
+.istui-timetable__nav-header_logo {
+    
+}
+  
+.istui-timetable__nav-header_actions {
+    
+}
+  
+.istui-timetable__nav-header_button {
+    
+}
+  
+.istui-timetable__nav-header_button-primary {
+    
+}
+  
+.istui-timetable__nav-header_button-secondary {
+    
+}
+  
+.istui-timetable__nav-header_search {
+    
+}
+  
+.istui-timetable__nav-header_search-input {
+    
+}
+  
+.istui-timetable__nav-header_search-icon {
+    
+}
+  
+.istui-timetable__nav-header_user {
+    
+}
+  
+.istui-timetable__nav-header_user-avatar {
+    
+}
+  
+.istui-timetable__nav-header_user-menu {
+    
+}
+
+.istui-timetable__nav-header_language-select {
+    
+}
+
+.istui-timetable__nav-header_color-select {
+    
+}
+  
+.istui-timetable__nav-header_user-menu_label {
+  
+}
+
+.istui-timetable__nav-header_user-menu_info {
+  
+}
+
+.istui-timetable__nav-header_user-menu_name {
+  
+}
+
+.istui-timetable__nav-header_user-menu_email {
+  
+}
+
+.istui-timetable__nav-header_user-menu_separator {
+  
+}
+
+.istui-timetable__nav-header_user-menu_item {
+  
+}
+
+.istui-timetable__nav-header_user-menu_item-profile {
+  
+}
+
+.istui-timetable__nav-header_user-menu_item-settings {
+  
+}
+
+.istui-timetable__nav-header_user-menu_item-logout {
+  
+}
+
+.istui-timetable__nav-header_user-menu_item-icon {
+  
+}
+
+
+.istui-timetable__nav-header_button-notification {
+  
+}
+
+.istui-timetable__nav-header_button-message {
+  
+}
+
+.istui-timetable__nav-header_button-icon {
+  
+}
+
+.istui-timetable__nav-header_notification-badge {
+  
+}
+  
+  
+.istui-timetable__sidebar {
+    
+}
+  
+.istui-timetable__sidebar_header {
+    
+}
+  
+.istui-timetable__sidebar_nav {
+    
+}
+  
+.istui-timetable__sidebar_item {
+    
+}
+  
+.istui-timetable__sidebar_item-active {
+    
+}
+  
+.istui-timetable__sidebar_icon {
+    
+}
+  
+.istui-timetable__sidebar_item_container {
+  
+}
+
+.istui-timetable__sidebar_link {
+  
+}
+
+.istui-timetable__sidebar_group {
+  
+}
+
+.istui-timetable__sidebar_label {
+  
+}
+
+.istui-timetable__sidebar_icon {
+  
+}
+
+.istui-timetable__sidebar_chevron {
+  
+}
+
+.istui-timetable__sidebar_chevron-down {
+  
+}
+
+.istui-timetable__sidebar_chevron-right {
+  
+}
+
+.istui-timetable__sidebar_submenu {
+  
+}
+
+.istui-timetable__sidebar_subitem {
+  
+}
+
+.istui-timetable__sidebar_logo {
+  
+}
+
+
+
+.istui-timetable__dashboard_page {
+  
+}
+
+.istui-timetable__dashboard_main {
+  
+}
+
+.istui-timetable__dashboard_container {
+  
+}
+
+.istui-timetable__dashboard_content {
+  
+}
+
+
+.istui-timetable__dashboard_header {
+  
+}
+
+.istui-timetable__dashboard_title {
+  
+}
+
+.istui-timetable__dashboard_subtitle {
+  
+}
+
+
+.istui-timetable__dashboard_tabs {
+  
+}
+
+.istui-timetable__dashboard_tabs_list {
+  
+}
+
+.istui-timetable__dashboard_tab_trigger {
+  
+}
+
+.istui-timetable__dashboard_tab_content {
+  
+}
+
+
+.istui-timetable__dashboard_stats_grid {
+  
+}
+
+.istui-timetable__dashboard_charts_grid {
+  
+}
+
+.istui-timetable__dashboard_tables_grid {
+  
+}
+
+
+.istui-timetable__dashboard_card {
+  
+}
+
+.istui-timetable__dashboard_card_header {
+  
+}
+
+.istui-timetable__dashboard_card_title {
+  
+}
+
+.istui-timetable__dashboard_card_content {
+  
+}
+
+
+.istui-timetable__dashboard_stats_card {
+  
+}
+
+.istui-timetable__dashboard_chart_card {
+  
+}
+
+.istui-timetable__dashboard_table_card {
+  
+}
+
+.istui-timetable__main_content {
+ 
+}
+
+.istui-timetable__main_breadcrumbs_wrapper {
+
+}
+
+.istui-timetable__main_breadcrumbs {
+ 
+}
+
+.istui-timetable__main_list_card {
+  
+}
+
+.istui-timetable__main_list_card_button {
+ 
+}
+
+.istui-timetable__main_list_card_button:hover {
+  
+}
+
+.istui-timetable__main_list_card_search_input {
+  
+}
+
+.istui-timetable__main_list_card_list_item {
+  
+}
+
+.istui-timetable__main_form_card {
+  
+}
+.istui-timetable__main_form_card_tab_details {
+
+}
+
+.istui-timetable__main_form_card_tab_schedule {
+
+}
+
+.istui-timetable__main_form_card_tab_settings {
+  
+}
+
+.istui-timetable__main_form_card_title {
+  
+}
+
+.istui-timetable__main_form_cancel_button {
+ 
+}
+
+.istui-timetable__main_form_save_button {
+  
+}
+
+.istui-timetable__main_form_delete_button {
+ 
+}
+
+.istui-timetable__main_form_input {
+  
+}
+
+.istui-timetable__main_form_input_label {
+  
+}
+
+.istui-timetable__main_form_input_error {
+
+}
+
+.istui-timetable__main_form_input_error_message {
+ 
+}
+
+.istui-timetable__main_form_input_error_icon {
+  
+}
+.istui-timetable__main_form_input_select {
+  
+}
+.istui-timetable__main_form_input_textarea {
+ 
+}
+
+.istui-timetable__main_form_checkbox {
+  
+}
+
+.istui-timetable__main_form_select_trigger {
+
+}
+
+.istui-timetable__main_form_radio_group {
+  
+}
+
+.istui-timetable__main_form_radio_item {
+  
+}
+
+.istui-timetable__main_form_input_select_content {
+  
+}
+
+.istui-timetable__main_form_radio_icon {
+  
+}
+
+.istui-timetable__main_form_input_switch {
+ 
+}
+.istui-timetable__main_preferences_container{
+
+}
+
+.istui-timetable__main_preferences_title{
+ 
+}
+
+.istui-timetable__main_preferences_selected{
+
+}
+
+.istui-timetable_main_preferences_options{
+
+}
+
+.istui-timetable_main_preferences_calendar{
+  
+}
+
+.istui-timetable_main_preferences_button{
+  
+}
+
+.istui-timetable_main_preferences_clear{
+ 
+}
+
+.istui-timetable__auth_container {
+ 
+}
+.istui-timetable__auth_container_language-select {
+  
+}
+
+.istui-timetable__auth_container_back-button {
+  
+}
+
+.istui-timetable__auth_container_card {
+  
+}
+
+.istui-timetable__auth_container_card_left {
+  
+}
+
+.istui-timetable__auth_container_card_right {
+  
+}
+
+.istui-timetable__auth_container_card__login_form_input_label {
+  
+}
+
+.istui-timetable__auth_container_card__login_form_input{
+ 
+}
+
+.istui-timetable__auth_container_card__login_form_button{
+  
+}
+
+.istui-timetable__auth_container_card__login_form_input_label_error {
+  
+}
+
+.istui-timetable__auth_container_card__signup_form_input_label {
+ 
+}
+
+.istui-timetable__auth_container_card__signup_form_input{
+
+}
+
+.istui-timetable__auth_container_card__signup_form_button{
+
+}
+
+
+.istui-timetable__auth_container_card__signup_form_input_label_error {
+  
+}

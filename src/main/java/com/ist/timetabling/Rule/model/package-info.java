@@ -1,0 +1,1 @@
+package com.ist.timetabling.Rule.model;

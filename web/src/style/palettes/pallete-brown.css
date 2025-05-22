@@ -1,0 +1,147 @@
+:root {
+  --screen: #e7e7e7;
+  --primary-color: #6B3510;
+  --primary-hover: #5a2c0d;
+  --primary-light-color: #f7ece3;
+  --primary-dark-color: #2c1605;
+  --secondary-color: #f7ece3;
+  --secondary-hover: #f0e2d6;
+  --elevated: #fff;
+  --progress-color: #6B3510;
+  --border-color: #e0d3c2;
+
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+
+  --primary: 26 74% 25%;
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 26 50% 96%;
+  --secondary-foreground: 26 80% 20%;
+
+  --muted: 26 40% 96.1%;
+  --muted-foreground: 26 30% 46.9%;
+
+  --accent: 26 40% 96.1%;
+  --accent-foreground: 26 80% 20%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 26 31.8% 91.4%;
+  --input: 26 31.8% 91.4%;
+  --ring: 26 74% 25%;
+
+  --radius: 0.5rem;
+
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 26 30% 30%;
+  --sidebar-primary: 26 60% 20%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 26 40% 95.9%;
+  --sidebar-accent-foreground: 26 60% 20%;
+  --sidebar-border: 26 40% 91%;
+  --sidebar-ring: 26 74% 25%;
+
+  --success: 142.1 76.2% 36.3%;
+  --warning: 38 92.7% 50.2%;
+  --info: 210 80% 55%;
+  --error: 0 84.2% 60.2%;
+
+  --blue: #3538CD;
+  --green: #5CCA69;
+  --purple: #9D61E3;
+  --red: #E15B4F;
+  --orange: #E87F3A;
+  --pink: #D64C93;
+  --teal: #168A8A;
+  --brown: #6B3510;
+
+  --palette-primary: var(--brown);
+
+  --subject-math-bg: 221.2 83.2% 95%;
+  --subject-math-border: 221.2 83.2% 85%;
+  --subject-math-text: 221.2 83.2% 25%;
+
+  --subject-hist-bg: 26 90% 95%;
+  --subject-hist-border: 26 90% 85%;
+  --subject-hist-text: 26 90% 25%;
+
+  --subject-phys-bg: 262.1 83.3% 95%;
+  --subject-phys-border: 262.1 83.3% 85%;
+  --subject-phys-text: 262.1 83.3% 25%;
+
+  --subject-eng-bg: 142.1 76.2% 95%;
+  --subject-eng-border: 142.1 76.2% 85%;
+  --subject-eng-text: 142.1 76.2% 25%;
+}
+
+.dark {
+  --screen: #171717;
+  --primary-color: #542a0c;
+  --primary-hover: #673210;
+  --secondary-color: #291705;
+  --secondary-hover: #31200a;
+  --elevated: #2c1605;
+  --progress-color: #542a0c;
+  --border-color: #3d2c1d;
+
+  --background: 26 60% 10%;
+  --foreground: 210 40% 98%;
+
+  --card: 26 60% 10%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 26 60% 10%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 210 40% 98%;
+  --primary-foreground: 26 60% 20%;
+
+  --secondary: 26 50% 20%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 26 50% 20%;
+  --muted-foreground: 26 30% 70%;
+
+  --accent: 26 50% 20%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 26 50% 20%;
+  --input: 26 50% 20%;
+  --ring: 26 40% 80%;
+
+  --sidebar-background: 26 60% 15%;
+  --sidebar-foreground: 26 40% 95.9%;
+  --sidebar-primary: 26 70% 40%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 26 50% 20%;
+  --sidebar-accent-foreground: 26 40% 95.9%;
+  --sidebar-border: 26 50% 20%;
+  --sidebar-ring: 26 70% 40%;
+
+  --subject-math-bg: 221.2 70% 20%;
+  --subject-math-border: 221.2 70% 30%;
+  --subject-math-text: 221.2 70% 95%;
+
+  --subject-hist-bg: 26 70% 20%;
+  --subject-hist-border: 26 70% 30%;
+  --subject-hist-text: 26 70% 95%;
+
+  --subject-phys-bg: 262.1 70% 20%;
+  --subject-phys-border: 262.1 70% 30%;
+  --subject-phys-text: 262.1 70% 95%;
+
+  --subject-eng-bg: 142.1 60% 20%;
+  --subject-eng-border: 142.1 60% 30%;
+  --subject-eng-text: 142.1 60% 95%;
+}
