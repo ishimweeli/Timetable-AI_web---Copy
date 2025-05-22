@@ -33,6 +33,29 @@ const PageManualScheduling = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const handlePublishTimetable = async () => {
+    if (!timetableId || !selectedPlanSettingId) {
+      toast.error(t('timetable.publishErrorNoId'));
+      return;
+    }
+    if (pendingEntries.length > 0) {
+      toast.error(t('timetable.savePendingEntriesBeforePublish'));
+      return;
+    }
+
+    setIsPublishing(true);
+    try {
+      const updatedTimetable = await TimetableGenerationService.publishTimetable(timetableId, selectedPlanSettingId);
+      setTimetable(updatedTimetable);
+      toast.success(t('timetable.publishSuccess'));
+      await loadScheduleFromBackend(); // Refresh entries
+    } catch (error) {
+      toast.error(t('timetable.publishError', { error: error.message || t('common.unknownError') }));
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
   const getInitialOrganizationId = () => {
     const storedOrgId = localStorage.getItem('selectedOrganizationId');
     if (storedOrgId) {
@@ -72,6 +95,7 @@ const PageManualScheduling = () => {
   const [lockDialogOpen, setLockDialogOpen] = useState(false);
   const [entryToLock, setEntryToLock] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
 
 
   const {
@@ -124,9 +148,27 @@ const PageManualScheduling = () => {
       toast.info('No pending entries to save');
       return;
     }
+
+    if (!selectedPlanSettingId) {
+      toast.error(t('timetable.selectPlanSettingForValidation'));
+      return;
+    }
     
     setIsLoading(true);
     try {
+      // Validate entries before saving
+      const validationConflicts = await TimetableGenerationService.validateEntries(pendingEntries, selectedPlanSettingId);
+      const actualConflicts = validationConflicts.filter(vc => vc.hasConflict);
+
+      if (actualConflicts.length > 0) {
+        actualConflicts.forEach(conflict => {
+          toast.error(t('timetable.validationError', { details: conflict.conflictDetails }));
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Proceed with saving if no validation conflicts
       const params = {
         organizationId,
         selectedClass,
@@ -176,8 +218,26 @@ const PageManualScheduling = () => {
       return;
     }
 
+    if (!selectedPlanSettingId) {
+      toast.error(t('timetable.selectPlanSettingForValidation'));
+      return;
+    }
+
     setIsLoading(true);
     try {
+      // Validate entries before saving
+      const validationConflicts = await TimetableGenerationService.validateEntries(pendingEntries, selectedPlanSettingId);
+      const actualConflicts = validationConflicts.filter(vc => vc.hasConflict);
+
+      if (actualConflicts.length > 0) {
+        actualConflicts.forEach(conflict => {
+          toast.error(t('timetable.validationError', { details: conflict.conflictDetails }));
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Proceed with saving if no validation conflicts
       const result = await TimetableGenerationService.handleManualSave(
         pendingEntries,
         bindings,
@@ -235,8 +295,15 @@ const PageManualScheduling = () => {
   const loadBindingsForClassOrClassBand = useCallback(async (id, type) => {
     try {
       let bindingsData = [];
+      const currentPlanSettingId = resolvePlanSettingsId(); // Get current plan setting ID
+
       if (type === 'class') {
-        bindingsData = await TimetableGenerationService.getBindingsForClass(id, organizationId);
+        if (!currentPlanSettingId) {
+          toast.error(t('timetable.selectPlanSettingToLoadBindings'));
+          setBindings([]); // Clear bindings if no plan setting is selected
+          return [];
+        }
+        bindingsData = await TimetableGenerationService.getBindingsForClass(id, organizationId, currentPlanSettingId);
         
         const formattedBindings = bindingsData.map(binding => ({
           id: binding.id,
@@ -308,7 +375,7 @@ const PageManualScheduling = () => {
       toast.error(`Error loading bindings: ${error.message || 'Unknown error'}`);
       return [];
     }
-  }, [organizationId]);
+  }, [organizationId, resolvePlanSettingsId, t]);
 
 
   const debouncedHandleClassChange = (classObj, type = 'class') => {
@@ -373,7 +440,14 @@ const PageManualScheduling = () => {
         await TimetableGenerationService.getClassTimetableEntries(classId);
 
         const classUuid = classObj.uuid || classObj.id;
-        await loadBindingsForClassOrClassBand(classUuid, 'class');
+        // Ensure planSettingId is available before loading bindings
+        const planSettingId = resolvePlanSettingsId();
+        if (planSettingId) {
+          await loadBindingsForClassOrClassBand(classUuid, 'class');
+        } else {
+          toast.info(t('timetable.selectPlanSettingFirst'));
+          setBindings([]); // Clear bindings if no plan setting
+        }
       } else if (type === 'classBand') {
         setSelectedClassBand(classObj);
         setSelectedClass(null);
@@ -413,7 +487,9 @@ const PageManualScheduling = () => {
     setEntries, 
     setPendingEntries, 
     setDataSource, 
-    loadBindingsForClassOrClassBand
+    loadBindingsForClassOrClassBand,
+    resolvePlanSettingsId, // Added resolvePlanSettingsId to dependency array
+    t // Added t to dependency array
   ]);
 
 
@@ -922,6 +998,14 @@ const PageManualScheduling = () => {
                       t('timetable.saveNow')
                     )}
                   </Button>
+                  <Button
+                    color="info"
+                    onClick={handlePublishTimetable}
+                    disabled={!timetableId || timetable?.isPublished || pendingEntries.length > 0 || isPublishing || isLoading}
+                    size="sm"
+                  >
+                    {isPublishing ? t('timetable.publishing') : t('timetable.publishTimetable')}
+                  </Button>
                 </div>
               </div>
 
@@ -932,7 +1016,7 @@ const PageManualScheduling = () => {
               )}
 
               {timetable && (
-                <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-2 mb-2">
+                <div className={`border-l-4 p-2 mb-2 ${timetable.isPublished ? 'bg-green-50 border-green-500 text-green-700' : 'bg-blue-50 border-blue-500 text-blue-700'}`}>
                   <p>
                     <span className="font-semibold">{t('timetable.currentTimetable')}:</span> 
                     {t('timetable.id')}: {timetable.id}, {t('timetable.created')}: {new Date(timetable.createdDate).toLocaleString()}
@@ -940,6 +1024,13 @@ const PageManualScheduling = () => {
                   <p>
                     <span className="font-semibold">{t('timetable.academicYear')}:</span> {timetable.academicYear}, 
                     <span className="font-semibold"> {t('timetable.semester')}:</span> {timetable.semester}
+                  </p>
+                  <p>
+                    <span className="font-semibold">{t('timetable.status')}:</span> 
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${timetable.isPublished ? 'bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'}`}>
+                      {timetable.isPublished ? t('timetable.statusPublished') : t('timetable.statusDraft')}
+                    </span>
+                    <span className="ml-2 font-semibold">{t('timetable.version')}:</span> {timetable.version}
                   </p>
                 </div>
               )}
@@ -1329,6 +1420,7 @@ const TimetableCell = ({
             className: isClassBandBinding ? item.binding.classBandName : (item.binding.className || ''),
             roomName: item.binding.roomName,
             isManuallyScheduled: true,
+            status: "Draft",
             classId: isClassBandBinding ? undefined : classIdValue,
             subjectId: item.binding.subjectId,
             teacherId: item.binding.teacherId,
